@@ -46,7 +46,7 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 ## État de l'Art
 
 
-
+---
 ## Architecture Globale
 
 ### Flux de fonctionnement dynamique
