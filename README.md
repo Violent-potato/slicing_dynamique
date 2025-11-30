@@ -36,7 +36,7 @@ Comment automatiser la création et l’association d’un UPF dédié lors du d
 Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 - Désactivation des UPF statiques dans les charts Helm officiels d’OAI  
-- Déploiement automatisé des UEs et du gNodeB via UERANSIM  
+- Déploiement automatisé des UEs et du gNB via UERANSIM  
 - Détection automatique de l’absence d’UPF dans les logs du SMF  
 - Génération automatique d’un UPF dédié pour chaque UE via un script Bash  
 - Suppression automatique d’un UPF lorsque l’UE est désinstallé  
