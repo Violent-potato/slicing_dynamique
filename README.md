@@ -53,12 +53,12 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 ## 4. Architecture Globale
 
 ### Flux de fonctionnement dynamique
-1. L'UE se connecte → SMF cherche un UPF  
-2. Aucun UPF trouvé → les logs affichent qu'aucun UPF n'a été trouvé   
-3. Le script lit les logs → déclenche la création d'un UPF  
-4. L'UPF est déployé via Helm + Multus  
-5. L'UPF s’enregistre au NRF  
-6. Le SMF trouve l’UPF → PDU session établie  
+1. L’UE se connecte → le SMF cherche un UPF  
+2. Aucun UPF trouvé → les logs affichent *"No UPF available"* et la PDU session est rejetée  
+3. Le script lit les logs → déclenche la création d’un UPF (via Helm)  
+4. L’UPF est déployé et s’enregistre au NRF  
+5. Le SMF refait la sélection → trouve l’UPF → PDU session établie  
+6. L’UE peut accéder à Internet (ping fonctionnel) 
 
 ---
 
@@ -74,4 +74,46 @@ oai-upf:
     version: v2.1.0
     pullPolicy: IfNotPresent
   includeTcpDumpContainer: false
+```
+### 2. Déploiement du RAN UERANSIM 
 
+```bash
+helm install ueransim-gnb 5g_ran/ueransim-gnb -n nexslice
+helm install ueransim-ue1 5g_ran/ueransim-ue1 -n nexslice
+```
+### 3. Tentative de PDU Session sans UPF
+Les UEs tentent d’établir une session PDU, mais le SMF rejette la requête car aucun UPF n’est disponible :
+
+```bash
+[nas] [error] PDU Session Establishment Reject received
+```
+### 4. Script de création dynamique d’UPF
+Le script :
+- prend en paramètres :
+le nom de l’UE, le SST (type de slice)
+
+- génère automatiquement une IP N3 unique pour l’UPF,
+
+- crée un fichier values.yaml temporaire avec cette configuration,
+
+- déploie un UPF spécifique via Helm,
+
+- associe ce UPF au slice via ```yaml
+   config.sst=<SST_ID>. ```
+
+L’UPF est alors déployé et s’enregistre correctement au NRF :
+```bash
+UPF upf-ue1 créé. Vérifiez les pods.
+[upf_app] [info] Got successful response from NRF
+[upf_app] [debug] NF Status REGISTERED
+```
+Pour s'assurer de la fonctionnalité de la solution, un ping Internet a été effectué avec succès :
+```bash
+kubectl exec -it -n nexslice ueransim-ue1-ueransim-ues-64d67cf8bd-5ctwl -- ping -c 3 -I uesimtun0 google.com
+
+64 bytes from google.com: icmp_seq=1 ttl=253 time=11.0 ms
+64 bytes from google.com: icmp_seq=2 ttl=253 time=8.75 ms
+64 bytes from google.com: icmp_seq=3 ttl=253 time=6.77 ms
+
+--- google.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss
