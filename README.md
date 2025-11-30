@@ -39,10 +39,7 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 - Déploiement automatisé des UEs et du gNodeB via UERANSIM  
 - Détection automatique de l’absence d’UPF dans les logs du SMF  
 - Génération automatique d’un UPF dédié pour chaque UE via un script Bash  
-- Configuration automatique des interfaces N3 avec IP unique pour chaque UPF  
-- Association dynamique entre UPF et slice (via SST)  
 - Suppression automatique d’un UPF lorsque l’UE est désinstallé  
-- Documentation complète et système facilement reproductible
   
 ---
 
