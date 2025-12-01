@@ -247,8 +247,10 @@ Ce script :
 
 ### Déploiement du coeur 5g
 Le coeur 5g se déploie de manière statique sans les UPF.
+![Schema](déploiement_statique.png)
 
 ### Déploiement du gNB et des UEs
+![Schema](UE_gNB.png)
 
 ### Tentative de PDU Session sans UPF
 Les UEs tentent d’établir une session PDU, mais le SMF rejette la requête car aucun UPF n’est disponible :
@@ -256,6 +258,9 @@ Les UEs tentent d’établir une session PDU, mais le SMF rejette la requête ca
 ```bash
 [nas] [error] PDU Session Establishment Reject received
 ```
+
+![Schema](echec_connexion.png)
+
 ### Création dynamique d’un UPF 
 Après l'execution du script, l’UPF est alors déployé et s’enregistre correctement au NRF :
 ```bash
@@ -263,6 +268,9 @@ UPF upf-ue1 créé. Vérifiez les pods.
 [upf_app] [info] Got successful response from NRF
 [upf_app] [debug] NF Status REGISTERED
 ```
+![Schema](upf.png)
+
+![Schema](connexion.png)
 
 ### Validation par ping Internet 
 Pour s'assurer de la fonctionnalité de la solution, un ping Internet a été effectué avec succès :
