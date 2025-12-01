@@ -45,6 +45,85 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 ## État de l'Art
 
+Table des matières
+1.	Le besoin de dynamisme et la séparation des plans
+   
+  a.	Dynamisme dans les réseaux 5G	
+  
+  b.	Séparation des plans	
+  
+2.	Les mécanismes d’orchestration et d’automatisation	
+
+  a.	Architectures d'Orchestration Cloud-Native (Kubernetes)
+  
+  b.	Closed loop automation
+  
+  c.	Trigger avec NexSlice	
+  
+3.	Solutions déjà existantes
+   
+  a.	Kubernetes Horizontal Pod Autoscaler
+  
+  b.	Orchestrateurs 5G (ONAP/OSM)
+  
+  c.	Implémentation du 3GPP
+
+
+## 1.	Le besoin de dynamisme et la séparation des plans
+
+a.	Dynamisme dans les réseaux 5G
+
+L’un des grands apports de la 5G est sa capacité à ajuster automatiquement les ressources du réseau en fonction des besoins réels des services et des utilisateurs. Contrairement aux générations précédentes (3G/4G), où les fonctions réseaux étaient figées sur du materiel dédié, la 5G repose sur des approches logicielles comme la virtualisation des fonctions réseau (Network Functions Virtualization) et les réseaux définis par logiciel (Software Defined Network). Ces technologies permettent de séparer le logiciel du matériel et d’exécuter les fonctions réseau sous forme d’instances virtuelles ou de conteneurs, offrant ainsi beaucoup plus de souplesse.
+	Cette évolution rend possible le Network Slicing, c’est-à-dire la création de plusieurs tranches virtuelles au sein d’un même réseau physique. Chaque slice est configurée pour répondre à un usage particulier : le haut débit mobile (enhanced Mobile BroadBand) ou les communications à très faible latence (Ultra-Reliable Low Latency Communication) par exemple. Cependant, dans des implémentations comme NexSlice, ce découpage reste encore statique : les fonctions du cœur de réseau comme la SMF (Session Management Function) et la UPF (User Plane Function), sont déployées à l’avance, sans tenir compte du nombre d’utilisateurs réellement connectés ou bien de la charge du réseau à ce moment.
+	Le slicing dynamique cherche à corriger cette rigidité en rendant le déploiement des ressources plus intelligent et réactif. L’idée est que chaque fois qu’un nouvel UE (User Equipment) se connecte au réseau via le gNB, un UPF dédié estsoit automatiquement créé pour gérer son trafic. De la même manière, lorsque l’UE se déconnecte, le UPF correspondant est supprimé, libérant ainsi les ressources inutilisées. Cette approche permet d’optimiser la consommation des ressources du cluster tout en adaptant le réseau en temps réel aux besoins réels du trafic.
+	Ainsi, le slicing dynamique contribue directement à la flexibilité, la scalabilité et l’efficacité énergétique du réseau 5G. Il s’inscrit dans la logique des architectures cloud-native, où les ressources ne sont créées et maintenues que lorsqu’elles sont nécessaires, selon le principe du on-demand networking.
+	
+ 
+b.	Séparation des plans
+
+Le concept de la 5G rendant possible le slicing est la séparation entre le plan de contrôle et le plan utilisateur.
+En effet, le plan de contrôle gère la signalisation, la mobilité ainsi que la gestion de session. Ce plan est incarné par des fonctions telles que le Session Management Function (SMF) et l’Access and mobility Management Function (AMF), le SMF étant l’entité qui permet de lier l’UE à une ressource et constituant le point de départ du dynamisme. Ces fonctions du plan de contrôle restent centralisées et stables, car elles assurent la continuité et l’intelligence des services de signalisation
+Le plan utilisateur, quant à lui, gère le transfert de dopnnéesdonnées utilisateur. Cette fonction est assurée par le User Plane Function (UPF) conçu pour être déployé comme une Cloud Native Network Function (CNF) sur k3s. C’est ce plan qui, dans un scénario de Multi-access Computing, permet une proximité entre les fonctions réseau et les utilisateurs. Graçe à sa nature modulaire, l’UPF peut être déployée, déplaxéedéplacée et mise à l’échelle selon les besoins.
+	Cette distribution permet de rendre le plan utilisateur dynamique, création et suppression sur commande, pour optimiser les ressources. Le plan de contrôle, lui, conserve la gestion logique de la session sans être impacté par la vie des fonctions de transfert.
+ 
+## 2.	Les mécanismes d’orchestration et d’automatisation
+
+a.	Architectures d'Orchestration Cloud-Native (Kubernetes)
+
+Kubernetes est un outil d’orchestration de conteneurs permettant de déployer tout type d’application.
+Avantage : auto-scaling, plusieurs possibilités de déploiement dans divers environnements. 
+ 
+b.	Closed loop automation
+
+La closed-loop automation (ou automatisation en boucle fermée) désigne un modèle dans lequel le réseau est capable de s’auto-observer, de prendre des décisions et d’agir automatiquement sans intervention humaine. Dans une architecture cloud-native comme celle d’un cœur 5G conteneurisé, cette capacité est essentielle pour garantir un comportement dynamique, réactif et optimisé des fonctions réseau.
+Le principe repose sur trois étapes majeures :
+
+1.	Monitorer l’état du réseau : récupération d’événements ou métriques (connexion d’un UE, création d’une session PDU, déconnexion, charge de l’UPF, etc.).
+2.	Analyser et décider : une logique décisionnelle (policy engine ou opérateur Kubernetes) détermine si une action doit être déclenchée, par exemple créer un UPF supplémentaire ou en supprimer un.
+3.	Agir automatiquement : l’orchestrateur applique la décision, en modifiant l’état réel du cluster (déploiement/suppression d’un UPF).
+Dans le contexte du slicing dynamique, cette boucle fermée est appliquée de manière très spécifique :
+•	Le déclencheur est un événement réseau provenant du plan de contrôle (arrivée ou départ d’un UE).
+•	L’analyse consiste à déterminer si une nouvelle instance UPF doit être créée pour cet UE.
+•	L’action est la création automatisée d’un manifest Kubernetes correspondant à un UPF dédié, ou sa suppression une fois la session terminée.
+Ainsi, la closed-loop automation fournit le cadre conceptuel permettant au réseau de s’auto-adapter au trafic réel, ce qui est précisément l’objectif recherché par le slicing dynamique : une gestion automatisée et intelligente des ressources du plan utilisateur.
+
+c.	Trigger avec NexSlice
+
+Dans NexSlice, le déclenchement (trigger) de la création ou suppression d’un UPF peut s’appuyer sur des événements internes au cœur 5G, notamment ceux détectés par le SMF. Comme le SMF est l’entité responsable de la gestion des sessions PDU, il constitue un point d’entrée naturel pour signaler l’arrivée ou la disparition d’un UE dans un slice.
+Le fonctionnement du trigger peut être résumé ainsi :
+1.	Connexion d’un UE au gNB : l’AMF reçoit le message de registration et transmet la demande de session PDU au SMF via N11.
+2.	Création de session PDU : à ce moment, NexSlice peut intercepter ou surveiller l’événement (par logs, API interne ou scrutation d’un fichier d’état) pour déclencher une action externe.
+3.	Trigger vers Kubernetes : un script, un opérateur Kubernetes ou un contrôleur maison reçoit l’événement et génère dynamiquement les manifests nécessaires au déploiement d’un UPF dédié pour cet UE.
+Inversement, lors de la déconnexion de l’UE, l’événement de libération de session (Session Release) est capté par le même mécanisme, déclenchant :
+4. Suppression de l’UPF correspondant, pour libérer les ressources du cluster.
+Le trigger est donc la pièce centrale du slicing dynamique dans NexSlice : c’est le lien entre la logique réseau (SMF/AMF) et l’orchestration cloud-native (Kubernetes).
+Selon les choix d’implémentation, ce mécanisme peut prendre différentes formes :
+•	un script surveillant en continu les logs du SMF,
+•	une API interne exposée par NexSlice qui notifie un contrôleur,
+•	un Custom Resource Definition (CRD) Kubernetes avec un opérateur dédié,
+•	un webhook généré à partir d’un événement réseau.
+Dans tous les cas, le rôle du trigger est le même : transformer un événement 5G en une action de déploiement dans Kubernetes — ce qui constitue le cœur du slicing dynamique de l’UPF.
+
 
 ---
 ## Architecture Globale
