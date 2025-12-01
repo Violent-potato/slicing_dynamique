@@ -66,7 +66,7 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 
 
-## 1.	Le besoin de dynamisme et la séparation des plans
+## 1. Le besoin de dynamisme et la séparation des plans
 
 ### a.	Dynamisme dans les réseaux 5G
 
