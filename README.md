@@ -196,7 +196,7 @@ Ainsi, l’implémentation 3GPP fournit le cadre logique de sélection de l’UP
 ## Méthodologie et Implémentation
 
 ### 1. Désactivation du slicing statique
-Dans le fichier de configuration Helm, il faut désactiver les UPF statiques en modifiant la valeur `enabled` à `false` :
+Dans le fichier de configuration Helm (5g_core/oai-5g-advance/values.yaml), il faut désactiver les UPF statiques en modifiant la valeur `enabled` à `false` :
 ```yaml
 oai-upf:
   enabled: false
