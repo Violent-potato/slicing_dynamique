@@ -92,6 +92,8 @@ a.	Architectures d'Orchestration Cloud-Native (Kubernetes)
 
 Kubernetes est un outil d’orchestration de conteneurs permettant de déployer tout type d’application.
 Avantage : auto-scaling, plusieurs possibilités de déploiement dans divers environnements. 
+
+![Schema](Schema.png)
  
 b.	Closed loop automation
 
