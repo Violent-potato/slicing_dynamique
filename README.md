@@ -47,19 +47,22 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 ## Table des matières
 
-1. [Le besoin de dynamisme et la séparation des plans](#le-besoin-de-dynamisme-et-la-separation-des-plans)
-   - [Dynamisme dans les réseaux 5G](#dynamisme-dans-les-reseaux-5g)
-   - [Séparation des plans](#separation-des-plans)
+## Table des matières
 
-2. [Les mécanismes d’orchestration et d’automatisation](#les-mecanismes-dorchestration-et-dautomatisation)
-   - [Architectures d'Orchestration Cloud-Native (Kubernetes)](#architectures-dorchestration-cloud-native-kubernetes)
-   - [Closed loop automation](#closed-loop-automation)
-   - [Trigger avec NexSlice](#trigger-avec-nexslice)
+1. [1. Le besoin de dynamisme et la séparation des plans](#1-le-besoin-de-dynamisme-et-la-separation-des-plans)
+   - [a. Dynamisme dans les réseaux 5G](#a-dynamisme-dans-les-reseaux-5g)
+   - [b. Séparation des plans](#b-separation-des-plans)
 
-3. [Solutions déjà existantes](#solutions-deja-existantes)
-   - [Kubernetes Horizontal Pod Autoscaler](#kubernetes-horizontal-pod-autoscaler)
-   - [Orchestrateurs 5G (ONAP/OSM)](#orchestrateurs-5g-onaposm)
-   - [Implémentation du 3GPP](#implementation-du-3gpp)
+2. [2. Les mécanismes d’orchestration et d’automatisation](#2-les-mecanismes-dorchestration-et-dautomatisation)
+   - [a. Architectures d'Orchestration Cloud-Native (Kubernetes)](#a-architectures-dorchestration-cloud-native-kubernetes)
+   - [b. Closed loop automation](#b-closed-loop-automation)
+   - [c. Trigger avec NexSlice](#c-trigger-avec-nexslice)
+
+3. [3. Solutions déjà existantes](#3-solutions-deja-existantes)
+   - [a. Kubernetes Horizontal Pod Autoscaler](#a-kubernetes-horizontal-pod-autoscaler)
+   - [b. Orchestrateurs 5G (ONAP/OSM)](#b-orchestrateurs-5g-onaposm)
+   - [c. Implémentation du 3GPP](#c-implementation-du-3gpp)
+
 
 
 
