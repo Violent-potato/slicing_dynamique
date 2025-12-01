@@ -45,28 +45,22 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 ## État de l'Art
 
-Table des matières
-1.	Le besoin de dynamisme et la séparation des plans
-   
-  a.	Dynamisme dans les réseaux 5G	
-  
-  b.	Séparation des plans	
-  
-2.	Les mécanismes d’orchestration et d’automatisation	
+## Table des matières
 
-  a.	Architectures d'Orchestration Cloud-Native (Kubernetes)
-  
-  b.	Closed loop automation
-  
-  c.	Trigger avec NexSlice	
-  
-3.	Solutions déjà existantes
-   
-  a.	Kubernetes Horizontal Pod Autoscaler
-  
-  b.	Orchestrateurs 5G (ONAP/OSM)
-  
-  c.	Implémentation du 3GPP
+1. [Le besoin de dynamisme et la séparation des plans](#le-besoin-de-dynamisme-et-la-separation-des-plans)
+   - [Dynamisme dans les réseaux 5G](#dynamisme-dans-les-reseaux-5g)
+   - [Séparation des plans](#separation-des-plans)
+
+2. [Les mécanismes d’orchestration et d’automatisation](#les-mecanismes-dorchestration-et-dautomatisation)
+   - [Architectures d'Orchestration Cloud-Native (Kubernetes)](#architectures-dorchestration-cloud-native-kubernetes)
+   - [Closed loop automation](#closed-loop-automation)
+   - [Trigger avec NexSlice](#trigger-avec-nexslice)
+
+3. [Solutions déjà existantes](#solutions-deja-existantes)
+   - [Kubernetes Horizontal Pod Autoscaler](#kubernetes-horizontal-pod-autoscaler)
+   - [Orchestrateurs 5G (ONAP/OSM)](#orchestrateurs-5g-onaposm)
+   - [Implémentation du 3GPP](#implementation-du-3gpp)
+
 
 
 ## 1.	Le besoin de dynamisme et la séparation des plans
