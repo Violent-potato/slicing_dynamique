@@ -126,6 +126,59 @@ Selon les choix d’implémentation, ce mécanisme peut prendre différentes for
 •	un webhook généré à partir d’un événement réseau.
 Dans tous les cas, le rôle du trigger est le même : transformer un événement 5G en une action de déploiement dans Kubernetes — ce qui constitue le cœur du slicing dynamique de l’UPF.
 
+## 3.	Solutions déjà existantes
+
+a.	Kubernetes Horizontal Pod Autoscaler
+
+Le Horizontal Pod Autoscaler (HPA) est l’un des mécanismes natifs de Kubernetes permettant d’ajuster automatiquement le nombre de pods en fonction de métriques observées.
+Il repose principalement sur :
+•	la CPU,
+•	la mémoire,
+•	ou des metrics personnalisées (Custom Metrics API).
+Dans le contexte d’un cœur 5G cloud-native, il pourrait théoriquement être utilisé pour faire varier le nombre d’instances UPF en fonction de la charge réseau.
+Cependant, son périmètre reste limité pour plusieurs raisons :
+•	Le HPA est conçu pour du scaling horizontal basé sur des métriques système, alors que l’UPF devrait être élastique en fonction d’événements réseau (UE attach/detach, création/suppression de session PDU), qui ne sont pas des métriques CPU/RAM.
+•	Chaque UPF est généralement dédié à un UE ou un slice, alors que le HPA gère des réplicas identiques d’un même déploiement, ce qui ne correspond pas au besoin d’une création individualisée d’instances avec configuration propre.
+•	Le scaling idéalement souhaité dans un réseau 5G n’est pas graduel (1 → 2 → 3 replicas), mais discret et événementiel (1 session PDU = 1 UPF).
+Ainsi, même s’il s’agit d’un mécanisme Kubernetes robuste, le HPA ne peut pas à lui seul répondre au besoin de slicing dynamique fondé sur la vie réelle des UEs.
+
+b.	Orchestrateurs 5G (ONAP/OSM)
+
+Les orchestrateurs 5G tels qu’ONAP (Open Network Automation Platform) ou OSM (Open Source MANO) proposent une gestion complète du cycle de vie des Network Functions (NFV) et du réseau 5G dans son ensemble.
+Ils intègrent notamment :
+•	la NSMF (Network Slice Management Function),
+•	la NFMF (Network Function Management Function),
+•	la gestion des VNFs/CNFs,
+•	l'automatisation du déploiement des slices et ressources associées,
+•	l’interfaçage avec Kubernetes via Helm ou Operators.
+En pratique, ces orchestrateurs peuvent :
+•	déclencher la création ou la suppression d’une instance UPF,
+•	configurer dynamiquement les policies du réseau,
+•	ou adapter le slicing selon la demande de trafic.
+Cependant, ils présentent plusieurs limites dans le cadre de NexSlice :
+•	Ce sont des plates-formes lourdes, complexes à installer et à intégrer pour un projet pédagogique ou expérimental.
+•	Leur déclenchement repose souvent sur des policies de haut niveau, pas sur des événements en temps réel tels que l’arrivée d’un UE individuel.
+•	Leur granularité est slice-level, alors que NexSlice demande une granularité par UE.
+Ces orchestrateurs représentent donc une solution complète, mais disproportionnée et trop générique par rapport au besoin de démonstration dynamique spécifique de votre projet.
+
+c.	Implémentation du 3GPP
+
+Le 3GPP définit précisément les interactions entre les fonctions du cœur 5G, notamment :
+•	la sélection de l’UPF par la SMF,
+•	le transport des messages N2 (AMF ↔ SMF),
+•	la gestion de session PDU via N11 et N4.
+Dans une architecture complète, c’est en effet :
+1.	L’AMF qui reçoit la demande de connexion depuis l’UE.
+2.	La SMF qui décide de créer une session PDU et choisit un UPF adapté.
+3.	L’orchestrateur externe, ou une entité de gestion, qui devrait déployer l’UPF si nécessaire.
+Le 3GPP ne définit pas directement comment déployer dynamiquement les ressources dans Kubernetes ou un cloud ; il se limite à la logique fonctionnelle.
+La liaison entre la signalisation 5G et l'infrastructure cloud (CNF lifecycle) est donc laissée libre à l’implémenteur.
+Dans NexSlice, cette interconnexion doit être explicitement créée :
+•	soit par un script surveillant les événements SMF,
+•	soit par un webhook déclenché lors d’une création de session,
+•	soit par un operator Kubernetes dédié qui réagit aux événements du réseau.
+Ainsi, l’implémentation 3GPP fournit le cadre logique de sélection de l’UPF, mais pas le mécanisme de trigger, qui doit être développé spécifiquement — et c’est précisément l’objectif du slicing dynamique que l'on réalise.
+
 
 ---
 ## Architecture Globale
