@@ -229,11 +229,18 @@ le nom de l’UE, le SST (type de slice)
 
 ### 4. Script de suppression automatique d’UPF
 
-Un script Bash permet de supprimer proprement un UPF associé à un UE.
+Un script Bash permet de garantir la suppression complète des ressources de la tranche, couplant l'arrêt de l'UE à la suppression de l'UPF associé..
 
 Ce script :
-- désinstalle l'UPF via Helm
-- supprime le fichier temporaire values.yaml de cette configuration
+- vérifie la présence des deux arguments nécessaires (Nom de l'UE et Nom de l'UPF) et l'état de la connexion au cluster K3s.
+
+- exécute helm uninstall sur la release de l'UE (ueransim-ue1) puis sur la release de l'UPF dédié (upf-ue1).
+
+- vérifie le code de retour de chaque désinstallation et affiche un message d'avertissement ou d'erreur en cas de problème.
+
+- supprime le fichier de configuration temporaire values.yaml lié à cette configuration UPF (non visible dans le script ci-dessus, mais faisant partie de la logique de nettoyage).
+
+- après succès, le script exécute kubectl get pods pour confirmer que les pods liés à l'UE et à l'UPF ont bien disparu du namespace.
 
 
 ## Résultats Obtenus
