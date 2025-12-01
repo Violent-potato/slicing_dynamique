@@ -284,6 +284,10 @@ kubectl exec -it -n nexslice ueransim-ue1-ueransim-ues-64d67cf8bd-5ctwl -- ping 
 --- google.com ping statistics ---
 3 packets transmitted, 3 received, 0% packet loss
 ```
+
+![Schema](ping.png)
+
+
 ### Suppression d’un UPF 
 L’UPF associé à l’UE est supprimé proprement via le script. La commande helm uninstall est exécutée, suivie du nettoyage du fichier temporaire. Le résultat est visible dans les logs :
 ```bash
@@ -291,6 +295,7 @@ L’UPF associé à l’UE est supprimé proprement via le script. La commande h
 release "upf-ue1" uninstalled
 UPF upf-ue1 supprimé.
 ```
+![Schema](delete.png)
 
 ## Conclusion
 
