@@ -50,18 +50,18 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 ## Table des matières
 
 1. [1. Le besoin de dynamisme et la separation des plans](#1-le-besoin-de-dynamisme-et-la-separation-des-plans)
-   - [a. Dynamisme dans les réseaux 5G](#a-dynamisme-dans-les-reseaux-5g)
-   - [b. Séparation des plans](#b-separation-des-plans)
+   - [a. Dynamisme dans les reseaux 5G](#a-dynamisme-dans-les-reseaux-5g)
+   - [b. Separation des plans](#b-separation-des-plans)
 
-2. [2. Les mécanismes d’orchestration et d’automatisation](#2-les-mecanismes-dorchestration-et-dautomatisation)
+2. [2. Les mecanismes d’orchestration et d’automatisation](#2-les-mecanismes-dorchestration-et-dautomatisation)
    - [a. Architectures d'Orchestration Cloud-Native (Kubernetes)](#a-architectures-dorchestration-cloud-native-kubernetes)
    - [b. Closed loop automation](#b-closed-loop-automation)
    - [c. Trigger avec NexSlice](#c-trigger-avec-nexslice)
 
-3. [3. Solutions déjà existantes](#3-solutions-deja-existantes)
+3. [3. Solutions deja existantes](#3-solutions-deja-existantes)
    - [a. Kubernetes Horizontal Pod Autoscaler](#a-kubernetes-horizontal-pod-autoscaler)
    - [b. Orchestrateurs 5G (ONAP/OSM)](#b-orchestrateurs-5g-onaposm)
-   - [c. Implémentation du 3GPP](#c-implementation-du-3gpp)
+   - [c. Implementation du 3GPP](#c-implementation-du-3gpp)
 
 
 
@@ -76,14 +76,14 @@ L’un des grands apports de la 5G est sa capacité à ajuster automatiquement l
 	Ainsi, le slicing dynamique contribue directement à la flexibilité, la scalabilité et l’efficacité énergétique du réseau 5G. Il s’inscrit dans la logique des architectures cloud-native, où les ressources ne sont créées et maintenues que lorsqu’elles sont nécessaires, selon le principe du on-demand networking.
 	
  
-### b.	Séparation des plans
+### b.	Separation des plans
 
 Le concept de la 5G rendant possible le slicing est la séparation entre le plan de contrôle et le plan utilisateur.
 En effet, le plan de contrôle gère la signalisation, la mobilité ainsi que la gestion de session. Ce plan est incarné par des fonctions telles que le Session Management Function (SMF) et l’Access and mobility Management Function (AMF), le SMF étant l’entité qui permet de lier l’UE à une ressource et constituant le point de départ du dynamisme. Ces fonctions du plan de contrôle restent centralisées et stables, car elles assurent la continuité et l’intelligence des services de signalisation
 Le plan utilisateur, quant à lui, gère le transfert de dopnnéesdonnées utilisateur. Cette fonction est assurée par le User Plane Function (UPF) conçu pour être déployé comme une Cloud Native Network Function (CNF) sur k3s. C’est ce plan qui, dans un scénario de Multi-access Computing, permet une proximité entre les fonctions réseau et les utilisateurs. Graçe à sa nature modulaire, l’UPF peut être déployée, déplaxéedéplacée et mise à l’échelle selon les besoins.
 	Cette distribution permet de rendre le plan utilisateur dynamique, création et suppression sur commande, pour optimiser les ressources. Le plan de contrôle, lui, conserve la gestion logique de la session sans être impacté par la vie des fonctions de transfert.
  
-## 2.	Les mécanismes d’orchestration et d’automatisation
+## 2.	Les mecanismes d’orchestration et d’automatisation
 
 ### a.	Architectures d'Orchestration Cloud-Native (Kubernetes)
 
@@ -123,7 +123,7 @@ Selon les choix d’implémentation, ce mécanisme peut prendre différentes for
 •	un webhook généré à partir d’un événement réseau.
 Dans tous les cas, le rôle du trigger est le même : transformer un événement 5G en une action de déploiement dans Kubernetes — ce qui constitue le cœur du slicing dynamique de l’UPF.
 
-## 3.	Solutions déjà existantes
+## 3.	Solutions deja existantes
 
 ### a.	Kubernetes Horizontal Pod Autoscaler
 
@@ -158,7 +158,7 @@ Cependant, ils présentent plusieurs limites dans le cadre de NexSlice :
 •	Leur granularité est slice-level, alors que NexSlice demande une granularité par UE.
 Ces orchestrateurs représentent donc une solution complète, mais disproportionnée et trop générique par rapport au besoin de démonstration dynamique spécifique de votre projet.
 
-### c.	Implémentation du 3GPP
+### c.	Implementation du 3GPP
 
 Le 3GPP définit précisément les interactions entre les fonctions du cœur 5G, notamment :
 •	la sélection de l’UPF par la SMF,
