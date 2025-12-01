@@ -49,7 +49,7 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 ## Table des matières
 
-1. [1. Le besoin de dynamisme et la séparation des plans](#1-le-besoin-de-dynamisme-et-la-separation-des-plans)
+1. [1. Le besoin de dynamisme et la separation des plans](#1-le-besoin-de-dynamisme-et-la-separation-des-plans)
    - [a. Dynamisme dans les réseaux 5G](#a-dynamisme-dans-les-reseaux-5g)
    - [b. Séparation des plans](#b-separation-des-plans)
 
@@ -66,7 +66,7 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 
 
-## 1. Le besoin de dynamisme et la séparation des plans
+## 1. Le besoin de dynamisme et la separation des plans
 
 ### a.	Dynamisme dans les réseaux 5G
 
