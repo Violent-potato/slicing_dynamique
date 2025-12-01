@@ -245,6 +245,11 @@ Ce script :
 
 ## Résultats Obtenus
 
+### Déploiement du coeur 5g
+Le coeur 5g se déploie de manière statique sans les UPF.
+
+### Déploiement du gNB et des UEs
+
 ### Tentative de PDU Session sans UPF
 Les UEs tentent d’établir une session PDU, mais le SMF rejette la requête car aucun UPF n’est disponible :
 
