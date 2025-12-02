@@ -154,7 +154,7 @@ Cependant, ils présentent plusieurs limites dans le cadre de NexSlice :
 •	Ce sont des plates-formes lourdes, complexes à installer et à intégrer pour un projet pédagogique ou expérimental.
 •	Leur déclenchement repose souvent sur des policies de haut niveau, pas sur des événements en temps réel tels que l’arrivée d’un UE individuel.
 •	Leur granularité est slice-level, alors que NexSlice demande une granularité par UE.
-Ces orchestrateurs représentent donc une solution complète, mais disproportionnée et trop générique par rapport au besoin de démonstration dynamique spécifique de votre projet.
+Ces orchestrateurs représentent donc une solution complète, mais disproportionnée et trop générique par rapport au besoin de démonstration dynamique spécifique du projet.
 
 ### Implementation du 3GPP
 
