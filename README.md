@@ -46,9 +46,9 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 ## État de l'Art
 
 ## Table des matières
-1. [1. Le besoin de dynamisme et la separation des plans](#1-le-besoin-de-dynamisme-et-la-separation-des-plans)
-   - [a. Dynamisme dans les reseaux 5G](#a-dynamisme-dans-les-reseaux-5g)
-   - [b. Separation des plans](#b-separation-des-plans)
+1. [Le besoin de dynamisme et la separation des plans](#le-besoin-de-dynamisme-et-la-separation-des-plans)
+   - [Dynamisme dans les reseaux 5G](#dynamisme-dans-les-reseaux-5g)
+   - [Separation des plans](#separation-des-plans)
 
 2. [2. Les mecanismes d’orchestration et d’automatisation](#2-les-mecanismes-dorchestration-et-dautomatisation)
    - [a. Architectures dOrchestration Cloud-Native (Kubernetes)](#a-architectures-dorchestration-cloud-native-kubernetes)
@@ -64,9 +64,9 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
 
 
 
-## 1. Le besoin de dynamisme et la separation des plans
+## Le besoin de dynamisme et la separation des plans
 
-### a.	Dynamisme dans les reseaux 5G
+### Dynamisme dans les reseaux 5G
 
 L’un des grands apports de la 5G est sa capacité à ajuster automatiquement les ressources du réseau en fonction des besoins réels des services et des utilisateurs. Contrairement aux générations précédentes (3G/4G), où les fonctions réseaux étaient figées sur du materiel dédié, la 5G repose sur des approches logicielles comme la virtualisation des fonctions réseau (Network Functions Virtualization) et les réseaux définis par logiciel (Software Defined Network). Ces technologies permettent de séparer le logiciel du matériel et d’exécuter les fonctions réseau sous forme d’instances virtuelles ou de conteneurs, offrant ainsi beaucoup plus de souplesse.
 	Cette évolution rend possible le Network Slicing, c’est-à-dire la création de plusieurs tranches virtuelles au sein d’un même réseau physique. Chaque slice est configurée pour répondre à un usage particulier : le haut débit mobile (enhanced Mobile BroadBand) ou les communications à très faible latence (Ultra-Reliable Low Latency Communication) par exemple. Cependant, dans des implémentations comme NexSlice, ce découpage reste encore statique : les fonctions du cœur de réseau comme la SMF (Session Management Function) et la UPF (User Plane Function), sont déployées à l’avance, sans tenir compte du nombre d’utilisateurs réellement connectés ou bien de la charge du réseau à ce moment.
@@ -74,7 +74,7 @@ L’un des grands apports de la 5G est sa capacité à ajuster automatiquement l
 	Ainsi, le slicing dynamique contribue directement à la flexibilité, la scalabilité et l’efficacité énergétique du réseau 5G. Il s’inscrit dans la logique des architectures cloud-native, où les ressources ne sont créées et maintenues que lorsqu’elles sont nécessaires, selon le principe du on-demand networking.
 	
  
-### b.	Separation des plans
+### Separation des plans
 
 Le concept de la 5G rendant possible le slicing est la séparation entre le plan de contrôle et le plan utilisateur.
 En effet, le plan de contrôle gère la signalisation, la mobilité ainsi que la gestion de session. Ce plan est incarné par des fonctions telles que le Session Management Function (SMF) et l’Access and mobility Management Function (AMF), le SMF étant l’entité qui permet de lier l’UE à une ressource et constituant le point de départ du dynamisme. Ces fonctions du plan de contrôle restent centralisées et stables, car elles assurent la continuité et l’intelligence des services de signalisation
