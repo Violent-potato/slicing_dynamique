@@ -50,15 +50,15 @@ Notre projet implémente un mécanisme de slicing dynamique basé sur :
    - [Dynamisme dans les reseaux 5G](#dynamisme-dans-les-reseaux-5g)
    - [Separation des plans](#separation-des-plans)
 
-2. [2. Les mecanismes d’orchestration et d’automatisation](#2-les-mecanismes-dorchestration-et-dautomatisation)
-   - [a. Architectures dOrchestration Cloud-Native (Kubernetes)](#a-architectures-dorchestration-cloud-native-kubernetes)
-   - [b. Closed loop automation](#b-closed-loop-automation)
-   - [c. Trigger avec NexSlice](#c-trigger-avec-nexslice)
+2. [Les mecanismes d’orchestration et d’automatisation](#les-mecanismes-dorchestration-et-dautomatisation)
+   - [Architectures dOrchestration Cloud-Native (Kubernetes)](#architectures-dorchestration-cloud-native-kubernetes)
+   - [Closed loop automation](#closed-loop-automation)
+   - [Trigger avec NexSlice](#trigger-avec-nexslice)
 
-3. [3. Solutions deja existantes](#3-solutions-deja-existantes)
-   - [a. Kubernetes Horizontal Pod Autoscaler](#a-kubernetes-horizontal-pod-autoscaler)
-   - [b. Orchestrateurs 5G (ONAP/OSM)](#b-orchestrateurs-5g-onaposm)
-   - [c. Implementation du 3GPP](#c-implementation-du-3gpp)
+3. [Solutions deja existantes](#solutions-deja-existantes)
+   - [Kubernetes Horizontal Pod Autoscaler](#kubernetes-horizontal-pod-autoscaler)
+   - [Orchestrateurs 5G (ONAP/OSM)](#orchestrateurs-5g-onaposm)
+   - [Implementation du 3GPP](#implementation-du-3gpp)
 
 
 
@@ -81,16 +81,16 @@ En effet, le plan de contrôle gère la signalisation, la mobilité ainsi que la
 Le plan utilisateur, quant à lui, gère le transfert de dopnnéesdonnées utilisateur. Cette fonction est assurée par le User Plane Function (UPF) conçu pour être déployé comme une Cloud Native Network Function (CNF) sur k3s. C’est ce plan qui, dans un scénario de Multi-access Computing, permet une proximité entre les fonctions réseau et les utilisateurs. Graçe à sa nature modulaire, l’UPF peut être déployée, déplaxéedéplacée et mise à l’échelle selon les besoins.
 	Cette distribution permet de rendre le plan utilisateur dynamique, création et suppression sur commande, pour optimiser les ressources. Le plan de contrôle, lui, conserve la gestion logique de la session sans être impacté par la vie des fonctions de transfert.
  
-## 2.	Les mecanismes d’orchestration et d’automatisation
+## Les mecanismes d’orchestration et d’automatisation
 
-### a.	Architectures d'Orchestration Cloud-Native (Kubernetes)
+### Architectures d'Orchestration Cloud-Native (Kubernetes)
 
 Kubernetes est un outil d’orchestration de conteneurs permettant de déployer tout type d’application.
 Avantage : auto-scaling, plusieurs possibilités de déploiement dans divers environnements. 
 
 ![Schema](Schema.png)
  
-### b.	Closed loop automation
+### Closed loop automation
 
 La closed-loop automation (ou automatisation en boucle fermée) désigne un modèle dans lequel le réseau est capable de s’auto-observer, de prendre des décisions et d’agir automatiquement sans intervention humaine. Dans une architecture cloud-native comme celle d’un cœur 5G conteneurisé, cette capacité est essentielle pour garantir un comportement dynamique, réactif et optimisé des fonctions réseau.
 Le principe repose sur trois étapes majeures :
@@ -104,7 +104,7 @@ Dans le contexte du slicing dynamique, cette boucle fermée est appliquée de ma
 •	L’action est la création automatisée d’un manifest Kubernetes correspondant à un UPF dédié, ou sa suppression une fois la session terminée.
 Ainsi, la closed-loop automation fournit le cadre conceptuel permettant au réseau de s’auto-adapter au trafic réel, ce qui est précisément l’objectif recherché par le slicing dynamique : une gestion automatisée et intelligente des ressources du plan utilisateur.
 
-### c.	Trigger avec NexSlice
+### Trigger avec NexSlice
 
 Dans NexSlice, le déclenchement (trigger) de la création ou suppression d’un UPF peut s’appuyer sur des événements internes au cœur 5G, notamment ceux détectés par le SMF. Comme le SMF est l’entité responsable de la gestion des sessions PDU, il constitue un point d’entrée naturel pour signaler l’arrivée ou la disparition d’un UE dans un slice.
 Le fonctionnement du trigger peut être résumé ainsi :
@@ -121,9 +121,9 @@ Selon les choix d’implémentation, ce mécanisme peut prendre différentes for
 •	un webhook généré à partir d’un événement réseau.
 Dans tous les cas, le rôle du trigger est le même : transformer un événement 5G en une action de déploiement dans Kubernetes — ce qui constitue le cœur du slicing dynamique de l’UPF.
 
-## 3.	Solutions deja existantes
+## Solutions deja existantes
 
-### a.	Kubernetes Horizontal Pod Autoscaler
+### Kubernetes Horizontal Pod Autoscaler
 
 Le Horizontal Pod Autoscaler (HPA) est l’un des mécanismes natifs de Kubernetes permettant d’ajuster automatiquement le nombre de pods en fonction de métriques observées.
 Il repose principalement sur :
@@ -137,7 +137,7 @@ Cependant, son périmètre reste limité pour plusieurs raisons :
 •	Le scaling idéalement souhaité dans un réseau 5G n’est pas graduel (1 → 2 → 3 replicas), mais discret et événementiel (1 session PDU = 1 UPF).
 Ainsi, même s’il s’agit d’un mécanisme Kubernetes robuste, le HPA ne peut pas à lui seul répondre au besoin de slicing dynamique fondé sur la vie réelle des UEs.
 
-### b.	Orchestrateurs 5G (ONAP/OSM)
+### Orchestrateurs 5G (ONAP/OSM)
 
 Les orchestrateurs 5G tels qu’ONAP (Open Network Automation Platform) ou OSM (Open Source MANO) proposent une gestion complète du cycle de vie des Network Functions (NFV) et du réseau 5G dans son ensemble.
 Ils intègrent notamment :
@@ -156,7 +156,7 @@ Cependant, ils présentent plusieurs limites dans le cadre de NexSlice :
 •	Leur granularité est slice-level, alors que NexSlice demande une granularité par UE.
 Ces orchestrateurs représentent donc une solution complète, mais disproportionnée et trop générique par rapport au besoin de démonstration dynamique spécifique de votre projet.
 
-### c.	Implementation du 3GPP
+### Implementation du 3GPP
 
 Le 3GPP définit précisément les interactions entre les fonctions du cœur 5G, notamment :
 •	la sélection de l’UPF par la SMF,
